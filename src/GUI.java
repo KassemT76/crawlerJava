@@ -7,52 +7,72 @@ import javafx.stage.Stage;
 import java.util.List;
 
 public class GUI extends Application {
+
+    private TextField searchField;
+    private Button searchButton;
+    private CheckBox pageRankBoost;
+    private ListView<String> searchResults;
+    private Controller controller;
+
     @Override
     public void start(Stage primaryStage) {
         Pane root = new Pane();
 
-        TextField searchField = new TextField();
+        initUIComponents(root);
+
+        Scene scene = new Scene(root, 600, 325);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("1406Z Course Project");
+        primaryStage.show();
+
+        controller = new Controller(this);
+    }
+
+    private void initUIComponents(Pane root) {
+        searchField = new TextField();
         searchField.setPromptText("Enter query");
         searchField.setLayoutX(10);
         searchField.setLayoutY(10);
         searchField.setPrefSize(450, 30);
 
-        Button searchButton = new Button("Search");
+        searchButton = new Button("Search");
         searchButton.setLayoutX(470);
         searchButton.setLayoutY(10);
         searchButton.setPrefSize(120, 30);
 
-        CheckBox pageRankBoost = new CheckBox("Use PageRank boost");
+        pageRankBoost = new CheckBox("Use PageRank boost");
         pageRankBoost.setLayoutX(10);
         pageRankBoost.setLayoutY(50);
 
-        ListView<String> searchResults = new ListView<>();
+        searchResults = new ListView<>();
         searchResults.setLayoutX(10);
         searchResults.setLayoutY(78);
         searchResults.setPrefSize(580, 237);
         searchResults.setStyle("-fx-background-radius: 7; -fx-padding: 3;");
 
         root.getChildren().addAll(searchField, searchButton, pageRankBoost, searchResults);
-
-        searchButton.setOnAction(event -> {
-            String query = searchField.getText();
-            boolean isBoosted = pageRankBoost.isSelected();
-            List<String> results = performanceSearch(query, isBoosted);
-            searchResults.getItems().setAll(results);
-        });
-
-        Scene scene = new Scene(root, 600, 325);
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("1406Z Course Project");
-        primaryStage.show();
     }
 
-    // Add actual results
-    private List<String> performanceSearch(String query, boolean isBoosted) {
-        return List.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
+    public String getQuery() {
+        return searchField.getText();
     }
 
-    public static void main (String[] args) {
+    public boolean isPageRankBoosted() {
+        return pageRankBoost.isSelected();
+    }
+
+    public void setSearchResults(List<SearchResult> results) {
+        searchResults.getItems().clear();
+        for (SearchResult searchResult : results) {
+            searchResults.getItems().add(String.format("Title: %s Score: %.3f ", searchResult.getTitle(), searchResult.getScore()));
+        }
+    }
+
+    public Button getSearchButton() {
+        return searchButton;
+    }
+
+    public static void main(String[] args) {
         launch(args);
     }
 }
