@@ -2,7 +2,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-public class crawlMain implements ProjectTester {
+public class Searcher implements ProjectTester {
     private osutil os;
     private ArrayList<String> links;
     private ArrayList<String> indexes;

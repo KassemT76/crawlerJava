@@ -25,9 +25,9 @@ public class WebRequester {
     public static void main(String[] args){
         try {
             System.out.println(WebRequester.readURL("http://people.scs.carleton.ca/~davidmckenney/fruits/N-0.html"));
-        }catch(MalformedURLException e){
+        } catch(MalformedURLException e){
             e.printStackTrace();
-        }catch(IOException e){
+        } catch(IOException e){
             e.printStackTrace();
         }
     }
