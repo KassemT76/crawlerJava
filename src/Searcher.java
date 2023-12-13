@@ -1,6 +1,5 @@
 import java.io.File;
 import java.util.*;
-
 public class Searcher implements ProjectTester {
     private OsUtil os;
     private ArrayList<String> links;
