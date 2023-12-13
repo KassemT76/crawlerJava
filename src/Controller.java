@@ -3,10 +3,9 @@ import javafx.application.Platform;
 import java.util.List;
 
 public class Controller {
-
     private GUI view;
     private Searcher c;
-    private List<SearchResult> searchResults; // This will be your actual search results.
+    private List<SearchResult> searchResults;
 
     public Controller (GUI view) {
         this.view = view;
@@ -25,22 +24,12 @@ public class Controller {
     private void performCrawl () {
         String seed = view.getSeed();
 
-//        try {
-//            view.setCrawlLabelText("Crawling...");
-//            c.crawl(seed);
-//            view.setCrawlLabelText("Crawl complete!");
-//        } catch (Exception e) {
-//            view.setCrawlLabelText("Crawl could not be completed, try again.");
-//        }
-
-        // Better method of displaying the "Crawling..." text.
         try {
             view.setCrawlLabelText("Crawling...");
 
             new Thread(() -> {
                 try {
                     c.crawl(seed);
-
                     Platform.runLater(() -> {
                         view.setCrawlLabelText("Crawl complete!");
                     });
@@ -50,8 +39,8 @@ public class Controller {
                     });
                 }
             }).start();
-
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             view.setCrawlLabelText("An unexpected error occurred.");
         }
     }

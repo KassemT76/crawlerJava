@@ -15,7 +15,6 @@ public class GUI extends Application {
     private Label crawlLabel;
     private CheckBox pageRankBoost;
     private ListView<String> searchResults;
-    private Controller controller;
 
     @Override
     public void start (Stage primaryStage) {
@@ -28,9 +27,10 @@ public class GUI extends Application {
         primaryStage.setTitle("1406Z Course Project");
         primaryStage.show();
 
-        controller = new Controller(this);
+        Controller controller = new Controller(this);
     }
 
+    // Create the user interface
     private void initUIComponents (Pane root) {
         searchField = new TextField();
         searchField.setPromptText("Enter query");
@@ -70,6 +70,8 @@ public class GUI extends Application {
 
         root.getChildren().addAll(searchField, seedField, searchButton, crawlButton, crawlLabel, pageRankBoost, searchResults);
     }
+
+    // Methods for other classes:
 
     public String getQuery () {
         return searchField.getText();
