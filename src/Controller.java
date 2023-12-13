@@ -28,14 +28,14 @@ public class Controller {
         if (seed.isEmpty()) {
             seed = "https://people.scs.carleton.ca/~davidmckenney/tinyfruits/N-0.html";
             c.crawl(seed);
-            view.setCrawlLabelText("Crawl complete using default seed (https://people.scs.carleton.ca/~davidmckenney/tinyfruits/N-0.html).");
+            view.setCrawlLabelText("Crawl complete! using default seed (https://people.scs.carleton.ca/~davidmckenney/tinyfruits/N-0.html).");
         }
         else {
             try {
                 c.crawl(seed);
                 view.setCrawlLabelText("Crawl complete!");
             } catch (Exception e) {
-                view.setCrawlLabelText("Crawl could not be completed, try again.");
+                view.setCrawlLabelText("Crawl could not be completed, please use a valid seed.");
             }
         }
     }
