@@ -29,3 +29,11 @@ bin/
 .DS_Store
 
 resources/
+
+resources/idf
+resources/tf
+resources/pagerank
+resources/incoming
+resources/outgoing
+
+resources
