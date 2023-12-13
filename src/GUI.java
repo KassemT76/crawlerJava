@@ -7,7 +7,6 @@ import javafx.stage.Stage;
 import java.util.List;
 
 public class GUI extends Application {
-
     private TextField searchField;
     private TextField seedField;
     private Button searchButton;
@@ -15,7 +14,6 @@ public class GUI extends Application {
     private Label crawlLabel;
     private CheckBox pageRankBoost;
     private ListView<String> searchResults;
-    private Controller controller;
 
     @Override
     public void start (Stage primaryStage) {
@@ -25,12 +23,13 @@ public class GUI extends Application {
 
         Scene scene = new Scene(root, 600, 375);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("1406Z Course Project");
+        primaryStage.setTitle("COMP 1406Z Course Project");
         primaryStage.show();
 
-        controller = new Controller(this);
+        Controller controller = new Controller(this);
     }
 
+    // Create the user interface
     private void initUIComponents (Pane root) {
         searchField = new TextField();
         searchField.setPromptText("Enter query");
@@ -39,7 +38,7 @@ public class GUI extends Application {
         searchField.setPrefSize(450, 30);
 
         seedField = new TextField();
-        seedField.setPromptText("Enter seed");
+        seedField.setPromptText("Enter seed or leave blank and press button for default seed");
         seedField.setLayoutX(10);
         seedField.setLayoutY(20);
         seedField.setPrefSize(450, 30);
@@ -70,6 +69,8 @@ public class GUI extends Application {
 
         root.getChildren().addAll(searchField, seedField, searchButton, crawlButton, crawlLabel, pageRankBoost, searchResults);
     }
+
+    // Methods for other classes:
 
     public String getQuery () {
         return searchField.getText();

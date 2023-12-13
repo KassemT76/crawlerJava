@@ -1,9 +1,9 @@
 import javafx.application.Platform;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Controller {
-
     private GUI view;
     private Searcher c;
     private List<SearchResult> searchResults; // This will be your actual search results.
@@ -58,7 +58,7 @@ public class Controller {
         }
     }
 
-    private List<SearchResult> performanceSearch(String query, boolean isBoosted, int x) {
-        return c.search(query, isBoosted, x);
+    private List<SearchResult> performanceSearch(String query, boolean isBoosted) {
+        return c.search(query, isBoosted, 10);
     }
 }
