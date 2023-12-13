@@ -7,6 +7,12 @@ public class Searcher implements ProjectTester {
     private ArrayList<String> indexes;
     private ArrayList<String> titles;
     private HashMap<String, String> linkMap;
+    private boolean crawled;
+
+    Searcher(){
+        crawled = false;
+    }
+    public String getSeedURL(){ return links.get(0);}
     /*
     This method must delete any existing data that has been stored from any previous crawl.
     This method should also perform any other initialization needed by your system.
@@ -38,6 +44,8 @@ public class Searcher implements ProjectTester {
         for (int i = 0; i < links.size(); i++) {
             linkMap.put(links.get(i), indexes.get(i));
         }
+
+        crawled = true;
     }
 
     /*
@@ -78,11 +86,11 @@ public class Searcher implements ProjectTester {
                 return Float.parseFloat(os.readFile("pagerank"+ File.separator + linkMap.get(url)).get(0));
             }
             else {
-                return 0;
+                return -1;
             }
         }
         catch (NullPointerException e){
-            return 0;
+            return -1;
         }
     }
 
@@ -138,16 +146,21 @@ public class Searcher implements ProjectTester {
     A copy of this interface is included on the project's BrightSpace page.
      */
     public List<SearchResult> search(String query, boolean boost, int X) {
-        os = new osutil("resources");
+        File resources = new File("resources");
 
-        links = os.readFile("links");
-        indexes = os.readFile("index");
-        titles= os.readFile("title");
+        if(resources.exists() && Objects.requireNonNull(resources.list()).length > 0 && !crawled){
+            os = new OsUtil("resources");
 
-        linkMap = new HashMap<String, String>();
-        for (int i = 0; i < links.size(); i++) {
-            linkMap.put(links.get(i), indexes.get(i));
+            links = os.readFile("links");
+            indexes = os.readFile("index");
+            titles= os.readFile("title");
+
+            linkMap = new HashMap<String, String>();
+            for (int i = 0; i < links.size(); i++) {
+                linkMap.put(links.get(i), indexes.get(i));
+            }
         }
+
 
         ArrayList<SearchResult> top = new ArrayList<SearchResult>();
 

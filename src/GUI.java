@@ -84,8 +84,11 @@ public class GUI extends Application {
         return pageRankBoost.isSelected();
     }
 
-    public void setSearchResults (List<SearchResult> results) {
+    public void clearSearchResults(){
         searchResults.getItems().clear();
+    }
+    public void setSearchResults (List<SearchResult> results) {
+        clearSearchResults();
 
         for (SearchResult searchResult : results) {
             searchResults.getItems().add(String.format("Title: %s Score: %.3f ", searchResult.getTitle(), searchResult.getScore()));

@@ -1,5 +1,6 @@
 import javafx.application.Platform;
 
+import java.io.File;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,17 +19,22 @@ public class Controller {
     }
 
     private void performSearch () {
+        view.clearSearchResults();
         String query = view.getQuery();
         boolean isBoosted = view.isPageRankBoosted();
-        System.out.println(query);
 
-        if(crawled){
-            List<SearchResult> results = performanceSearch(query, isBoosted, 10);
+        try {
+            List<SearchResult> results = performanceSearch(query, isBoosted);
             view.setSearchResults(results);
 
-        }else {
-            view.setCrawlLabelText("Please crawl a webpage before searching...");
+            if (!crawled){
+                view.setCrawlLabelText("Getting data from seed: " + c.getSeedURL());
+            }
+        } catch (Exception e){
+            view.setCrawlLabelText("Please crawl a valid webpage! The seed URL given, "+c.getSeedURL()+" ,is invalid.");
         }
+
+
     }
 
     private void performCrawl () {
