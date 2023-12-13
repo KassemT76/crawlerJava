@@ -1,6 +1,7 @@
 import javafx.application.Platform;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Controller {
     private GUI view;
@@ -17,35 +18,29 @@ public class Controller {
     private void performSearch () {
         String query = view.getQuery();
         boolean isBoosted = view.isPageRankBoosted();
-        List<SearchResult> results = performanceSearch(query, isBoosted, 10);
+        List<SearchResult> results = performanceSearch(query, isBoosted);
         view.setSearchResults(results);
     }
 
     private void performCrawl () {
         String seed = view.getSeed();
 
-        try {
-            view.setCrawlLabelText("Crawling...");
-
-            new Thread(() -> {
-                try {
-                    c.crawl(seed);
-                    Platform.runLater(() -> {
-                        view.setCrawlLabelText("Crawl complete!");
-                    });
-                } catch (Exception e) {
-                    Platform.runLater(() -> {
-                        view.setCrawlLabelText("Crawl could not be completed, try again.");
-                    });
-                }
-            }).start();
+        if (seed.isEmpty()) {
+            seed = "https://people.scs.carleton.ca/~davidmckenney/tinyfruits/N-0.html";
+            c.crawl(seed);
+            view.setCrawlLabelText("Crawl complete using default seed (https://people.scs.carleton.ca/~davidmckenney/tinyfruits/N-0.html).");
         }
-        catch (Exception e) {
-            view.setCrawlLabelText("An unexpected error occurred.");
+        else {
+            try {
+                c.crawl(seed);
+                view.setCrawlLabelText("Crawl complete!");
+            } catch (Exception e) {
+                view.setCrawlLabelText("Crawl could not be completed, try again.");
+            }
         }
     }
 
-    private List<SearchResult> performanceSearch(String query, boolean isBoosted, int x) {
-        return c.search(query, isBoosted, x);
+    private List<SearchResult> performanceSearch(String query, boolean isBoosted) {
+        return c.search(query, isBoosted, 10);
     }
 }

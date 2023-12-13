@@ -7,7 +7,6 @@ import javafx.stage.Stage;
 import java.util.List;
 
 public class GUI extends Application {
-
     private TextField searchField;
     private TextField seedField;
     private Button searchButton;
@@ -24,7 +23,7 @@ public class GUI extends Application {
 
         Scene scene = new Scene(root, 600, 375);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("1406Z Course Project");
+        primaryStage.setTitle("COMP 1406Z Course Project");
         primaryStage.show();
 
         Controller controller = new Controller(this);
@@ -39,7 +38,7 @@ public class GUI extends Application {
         searchField.setPrefSize(450, 30);
 
         seedField = new TextField();
-        seedField.setPromptText("Enter seed");
+        seedField.setPromptText("Enter seed or leave blank and press button for default seed");
         seedField.setLayoutX(10);
         seedField.setLayoutY(20);
         seedField.setPrefSize(450, 30);

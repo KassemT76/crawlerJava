@@ -11,7 +11,7 @@ public class Searcher implements ProjectTester {
     /*
     This method must delete any existing data that has been stored from any previous crawl.
     This method should also perform any other initialization needed by your system.
-    This method will be always called before executing the crawl for a new dataset
+    This method will always be called before executing the crawl for a new dataset
      */
     public void initialize(){
         os = new osutil("resources");
@@ -142,7 +142,18 @@ public class Searcher implements ProjectTester {
     A copy of this interface is included on the project's BrightSpace page.
      */
     public List<SearchResult> search(String query, boolean boost, int X) {
-         ArrayList<SearchResult> top = new ArrayList<SearchResult>();
+        os = new osutil("resources");
+
+        links = os.readFile("links");
+        indexes = os.readFile("index");
+        titles= os.readFile("title");
+
+        linkMap = new HashMap<String, String>();
+        for (int i = 0; i < links.size(); i++) {
+            linkMap.put(links.get(i), indexes.get(i));
+        }
+
+        ArrayList<SearchResult> top = new ArrayList<SearchResult>();
 
         String[] phrase_arr = query.split(" ");
 
