@@ -1,11 +1,10 @@
-import java.awt.geom.Arc2D;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class crawler {
+public class Crawler {
     private String webString;
     private String baseurl;
     private String title;
@@ -18,7 +17,7 @@ public class crawler {
     private ArrayList<String> outlinks;
 
 
-    crawler(){
+    Crawler(){
         title = "";
         baseurl = "";
 
@@ -48,7 +47,7 @@ public class crawler {
     }
     public String getWebString(){return webString;}
 
-    public int scrape_url(String scraping_link){
+    public void scrape_url(String scraping_link){
         ArrayList<String> words = new ArrayList<String>();
         HashMap<String, Integer> wordCount  = new HashMap<String, Integer>();
 
@@ -58,108 +57,97 @@ public class crawler {
 
         fetchString(scraping_link);
 
-        if(webString == null){return 1;}
+        if(webString == null){return;}
 
         int i = 0;
 
-        while(i < webString.length()-1){
+        while(i < webString.length()-1) {
             //Tag Detection
-            if(webString.charAt(i) == '<'){
+            if (webString.charAt(i) == '<') {
                 //Title Detection
-                if(webString.substring(i + 1, i + 6).equals("title")){
-                    while(webString.charAt(i) != '>'){
+                if (webString.substring(i + 1, i + 6).equals("title")) {
+                    while (webString.charAt(i) != '>') {
                         i++;
                     }
                     i++;
-                    while (!(webString.charAt(i) == '<' || webString.charAt(i) == '/')){
+                    while (!(webString.charAt(i) == '<' || webString.charAt(i) == '/')) {
                         title += webString.charAt(i);
                         i++;
                     }
                 }
                 //P Detection
-                if(webString.charAt(i+1)=='p'){
+                if (webString.charAt(i + 1) == 'p') {
                     String word = "";
-                    while(webString.charAt(i) != '>'){
+                    while (webString.charAt(i) != '>') {
                         i++;
                     }
                     i++;
-                    while (!(webString.charAt(i) == '<' || webString.charAt(i) == '/')){
-                        if(!word.isEmpty() && (webString.charAt(i) == ' ' || webString.substring(i, i + 1).equals("\n"))){
+                    while (!(webString.charAt(i) == '<' || webString.charAt(i) == '/')) {
+                        if (!word.isEmpty() && (webString.charAt(i) == ' ' || webString.substring(i, i + 1).equals("\n"))) {
                             words.add(word);
                             word = "";
-                        }
-                        else if(!(webString.substring(i, i + 1).equals("\n"))){
+                        } else if (!(webString.substring(i, i + 1).equals("\n"))) {
                             word += webString.charAt(i);
                         }
                         i++;
                     }
-                    for(String currWord : words){
-                        if(wordCount.containsKey(currWord)){
-                            wordCount.put(currWord,wordCount.get(currWord)+1);
-                        }
-                        else{
+                    for (String currWord : words) {
+                        if (wordCount.containsKey(currWord)) {
+                            wordCount.put(currWord, wordCount.get(currWord) + 1);
+                        } else {
                             wordCount.put(currWord, 1);
                         }
-                        if(idf_counter.containsKey(currWord)){
-                                if(!idf_counter.get(currWord).contains(scraping_link)) {
-                                    idf_counter.get(currWord).add(scraping_link);
-                                }
-                        }
-                        else {
+                        if (idf_counter.containsKey(currWord)) {
+                            if (!idf_counter.get(currWord).contains(scraping_link)) {
+                                idf_counter.get(currWord).add(scraping_link);
+                            }
+                        } else {
                             ArrayList<String> tempList = new ArrayList<String>();
                             tempList.add(scraping_link);
                             idf_counter.put(currWord, tempList);
                         }
                     }
                     int size = words.size();
-                    for(String wordKey : wordCount.keySet()){
-                        tf.put(wordKey, (double) (wordCount.get(wordKey))/words.size());
+                    for (String wordKey : wordCount.keySet()) {
+                        tf.put(wordKey, (double) (wordCount.get(wordKey)) / words.size());
                     }
                 }
-                if(webString.charAt(i+1)=='a'){
+                if (webString.charAt(i + 1) == 'a') {
                     String link = "";
 
-                    i+=3;
+                    i += 3;
 
-                    while (!(webString.charAt(i) == '<' || webString.charAt(i) == '/')){
-                        if (webString.substring(i - 6, i).equals("href=\"")){
-                            while (webString.charAt(i) != '\"'){
+                    while (!(webString.charAt(i) == '<' || webString.charAt(i) == '/')) {
+                        if (webString.substring(i - 6, i).equals("href=\"")) {
+                            while (webString.charAt(i) != '\"') {
                                 link += webString.charAt(i);
                                 i++;
                             }
                         }
                         i++;
                     }
-                    link = baseurl+link.substring(1);
+                    link = baseurl + link.substring(1);
 
-                    if(!links.contains(link)){
+                    if (!links.contains(link)) {
                         links.add(link);
                     }
-                    if(!outlinks.contains(link)){
+                    if (!outlinks.contains(link)) {
                         outlinks.add(link);
                     }
                 }
             }
             i++;
         }
-//        System.out.println(title);
-//        System.out.println(words);
-//        System.out.println(links);
-//        System.out.println(outlinks);
-//        System.out.println(tf);
-//        System.out.println(idf_counter);
-
-        return 1;
     }
 
-    public void crawl(String seed) throws IOException {
+    public void crawl(String seed) {
         idf_counter.clear();
         links.clear();
         tf.clear();
         idf_counter.clear();
         outlinks.clear();
 
-        osutil os = new osutil("resources");
+        OsUtil os = new OsUtil("resources");
 
         os.createFolder("idf");
         os.createFolder("tf");
@@ -170,7 +158,6 @@ public class crawler {
         os.createFile("index");
         os.createFile("title");
         os.createFile("links");
-        os.createFile("baseurl");
 
         links.add(seed);
         for(int i = 0; i < links.size(); i++){
@@ -185,7 +172,6 @@ public class crawler {
             os.createFileWithList("outgoing"+File.separator+String.valueOf(i), outlinks);
             os.createFileWithHash("tf"+File.separator+i, tf);
         }
-        os.appendFile("baseurl",baseurl);
         //Incoming links
         HashMap<String, Integer> linkMap = new HashMap<String, Integer>();
 
@@ -209,6 +195,7 @@ public class crawler {
             idf.put(key, (Math.log((double) links.size() /(1+ idf_counter.get(key).size()))/Math.log(2)));
         }
         os.createFileWithHash("idf"+File.separator, idf);
+
         //Pagerank
         Double[][] matrix = new Double[links.size()][links.size()];
         double alpha = 0.1;
@@ -220,50 +207,29 @@ public class crawler {
                     matrix[i][j] = 1.0;
                     matrix[i][j] /= inlinks.size();
                     matrix[i][j] = (1-alpha)*matrix[i][j];
-                    matrix[i][j] += alpha/links.size();
                 }
                 else {
                     matrix[i][j]= 0.0;
-                    matrix[i][j] += alpha/links.size();
                 }
+                matrix[i][j] += alpha/links.size();
             }
         }
+
         Double[][] t = new Double[1][links.size()];
         double distance = 1f;
         for (int i = 0; i < links.size(); i++){
             t[0][i] = 1.0/links.size();
         }
-
+        MathHelper mth = new MathHelper();
         while (distance > 0.0001){
             Double[][] old_t = t;
-            t = mult_matrix(t, matrix);
-            distance = euclidean_dist(t, old_t);
+            t = mth.mult_matrix(t, matrix);
+            distance = mth.euclidean_dist(t, old_t);
         }
         for (int i = 0; i < t[0].length; i++) {
             os.appendFile("pagerank"+File.separator+i, String.valueOf(t[0][i]));
         }
 
-    }
-    private Double[][] mult_matrix(Double[][] a, Double[][] b){
-        Double[][] result = new Double[a.length][a[0].length];
-
-        for (int i = 0; i < a.length; i++){
-            for (int j = 0; j < b[0].length; j++){
-                result[i][j] = 0.0;
-                for(int k = 0; k < a[0].length; k++){
-                    result[i][j] += a[i][k]*b[k][j];
-                }
-            }
-        }
-        return result;
-    }
-    private double euclidean_dist(Double[][] a, Double[][] b){
-        double result = 0f;
-
-        for (int i = 0; i < a[0].length; i++) {
-            result += (a[0][i]-b[0][i])*(a[0][i]-b[0][i]); //basically just (a+b)^2 but im too lazy to check the exp function in java
-        }
-        return Math.sqrt(result);
     }
 }
 

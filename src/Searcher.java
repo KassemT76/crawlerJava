@@ -1,9 +1,8 @@
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 public class Searcher implements ProjectTester {
-    private osutil os;
+    private OsUtil os;
     private ArrayList<String> links;
     private ArrayList<String> indexes;
     private ArrayList<String> titles;
@@ -14,7 +13,7 @@ public class Searcher implements ProjectTester {
     This method will be always called before executing the crawl for a new dataset
      */
     public void initialize(){
-        os = new osutil("resources");
+        os = new OsUtil("resources");
         os.deleteFolder(new File("resources"));
     }
 
@@ -27,13 +26,10 @@ public class Searcher implements ProjectTester {
     public void crawl(String seedURL){
         initialize();
 
-        crawler c = new crawler();
-        try {
-            c.crawl(seedURL);
-        }
-        catch (IOException e){
-            System.out.println("CRITICAL FAILURE: could not finish crawl");
-        }
+        Crawler c = new Crawler();
+
+        c.crawl(seedURL);
+
         links = os.readFile("links");
         indexes = os.readFile("index");
         titles= os.readFile("title");

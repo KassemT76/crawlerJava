@@ -1,11 +1,10 @@
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class osutil {
+public class OsUtil {
     private String parent;
-    osutil(String parentFolder){
+    OsUtil(String parentFolder){
         parent = parentFolder;
         File par = new File(parent);
 
@@ -37,37 +36,54 @@ public class osutil {
     public boolean createFolder(String created_file){
         return new File(parent+File.separator+created_file).mkdir();
     }
-    public boolean createFile(String path_name) throws IOException {
-        FileOutputStream out;
-        out = new FileOutputStream(parent + File.separator + path_name+".txt");
-        out.close();
-        return true;
-    }
-    public boolean appendFile(String path_name, String x) throws IOException {
-        FileWriter fw = new FileWriter(parent + File.separator + path_name + ".txt",true);
-        fw.write(x+"\n");
-        fw.close();
-        return true;
-    }
-    public boolean createFileWithList(String path_name, ArrayList<String> lst) throws IOException {
-        FileOutputStream out;
-        out = new FileOutputStream(parent + File.separator + path_name+".txt");
-        for (String s : lst){
-            out.write((s+"\n").getBytes());
-        }
-
-        out.close();
-        return true;
-    }
-    public boolean createFileWithHash(String path_name, HashMap<String, Double> hashMap) throws IOException {
-        FileWriter out;
-        for (String s : hashMap.keySet()){
-            out = new FileWriter(parent + File.separator + path_name + s +".txt");
-            out.write(String.valueOf(hashMap.get(s)));
+    public boolean createFile(String path_name){
+        try {
+            FileOutputStream out;
+            out = new FileOutputStream(parent + File.separator + path_name+".txt");
             out.close();
+            return true;
+        }catch (IOException e){
+            return false;
         }
 
-        return true;
+    }
+    public boolean appendFile(String path_name, String x) {
+        try {
+            FileWriter out = new FileWriter(parent + File.separator + path_name + ".txt",true);
+            out.write(x+"\n");
+            out.close();
+            return true;
+        }catch (IOException e){
+            return false;
+        }
+
+    }
+    public boolean createFileWithList(String path_name, ArrayList<String> lst){
+        try {
+            FileOutputStream out;
+            out = new FileOutputStream(parent + File.separator + path_name+".txt");
+            for (String s : lst){
+                out.write((s+"\n").getBytes());
+            }
+            out.close();
+            return true;
+        }catch (IOException e){
+            return false;
+        }
+    }
+    public boolean createFileWithHash(String path_name, HashMap<String, Double> hashMap){
+        try {
+            FileWriter out;
+            for (String s : hashMap.keySet()){
+                out = new FileWriter(parent + File.separator + path_name + s +".txt");
+                out.write(String.valueOf(hashMap.get(s)));
+                out.close();
+            }
+
+            return true;
+        }catch (IOException e){
+            return false;
+        }
     }
     public ArrayList<String> readFile(String path_name){
         try {

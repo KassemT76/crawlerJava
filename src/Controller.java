@@ -7,10 +7,12 @@ public class Controller {
     private GUI view;
     private Searcher c;
     private List<SearchResult> searchResults; // This will be your actual search results.
+    private boolean crawled;
 
     public Controller (GUI view) {
         this.view = view;
         this.c = new Searcher();
+        crawled = false;
         view.getSearchButton().setOnAction(event -> performSearch());
         view.getCrawlButton().setOnAction(event -> performCrawl());
     }
@@ -18,21 +20,20 @@ public class Controller {
     private void performSearch () {
         String query = view.getQuery();
         boolean isBoosted = view.isPageRankBoosted();
-        List<SearchResult> results = performanceSearch(query, isBoosted, 10);
-        view.setSearchResults(results);
+        System.out.println(query);
+
+        if(crawled){
+            List<SearchResult> results = performanceSearch(query, isBoosted, 10);
+            view.setSearchResults(results);
+
+        }else {
+            view.setCrawlLabelText("Please crawl a webpage before searching...");
+        }
     }
 
     private void performCrawl () {
         String seed = view.getSeed();
-
-//        try {
-//            view.setCrawlLabelText("Crawling...");
-//            c.crawl(seed);
-//            view.setCrawlLabelText("Crawl complete!");
-//        } catch (Exception e) {
-//            view.setCrawlLabelText("Crawl could not be completed, try again.");
-//        }
-
+        
         // Better method of displaying the "Crawling..." text.
         try {
             view.setCrawlLabelText("Crawling...");
@@ -43,6 +44,7 @@ public class Controller {
 
                     Platform.runLater(() -> {
                         view.setCrawlLabelText("Crawl complete!");
+                        crawled = true;
                     });
                 } catch (Exception e) {
                     Platform.runLater(() -> {
