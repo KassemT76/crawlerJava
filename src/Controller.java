@@ -1,18 +1,16 @@
 import javafx.application.Platform;
 
-import java.io.File;
 import java.util.List;
-import java.util.Objects;
 
 public class Controller {
     private GUI view;
-    private Searcher c;
+    private ProjectTesterImp c;
     private List<SearchResult> searchResults; // This will be your actual search results.
     private boolean crawled;
 
     public Controller (GUI view) {
         this.view = view;
-        this.c = new Searcher();
+        this.c = new ProjectTesterImp();
         crawled = false;
         view.getSearchButton().setOnAction(event -> performSearch());
         view.getCrawlButton().setOnAction(event -> performCrawl());
@@ -42,6 +40,7 @@ public class Controller {
         
         // Better method of displaying the "Crawling..." text.
         try {
+            c.initialize();
             view.setCrawlLabelText("Crawling...");
 
             new Thread(() -> {

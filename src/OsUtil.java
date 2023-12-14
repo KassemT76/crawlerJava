@@ -7,17 +7,15 @@ public class OsUtil {
     OsUtil(String parentFolder){
         parent = parentFolder;
         File par = new File(parent);
-
         par.mkdir();
     }
-
     public boolean deleteFolder(File deleted_file){
 
         if(deleted_file.exists()){
             String[] entries = deleted_file.list();
             if (entries != null){
                 for (String s : entries){
-                    File currentfile = new File(deleted_file.getPath(),s);
+                    File currentfile = new File(deleted_file.getAbsolutePath()+File.separator+s);
                     if(currentfile.isDirectory()){
                         deleteFolder(currentfile);
                     }
@@ -98,7 +96,7 @@ public class OsUtil {
                 result.add(newLine);
                 i++;
             }
-
+            aFile.close();
             return result;
 
         } catch (IOException e){

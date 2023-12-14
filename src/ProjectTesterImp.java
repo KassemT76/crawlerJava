@@ -1,6 +1,6 @@
 import java.io.File;
 import java.util.*;
-public class Searcher implements ProjectTester {
+public class ProjectTesterImp implements ProjectTester {
     private OsUtil os;
     private ArrayList<String> links;
     private ArrayList<String> indexes;
@@ -8,8 +8,9 @@ public class Searcher implements ProjectTester {
     private HashMap<String, String> linkMap;
     private boolean crawled;
 
-    Searcher(){
+    ProjectTesterImp(){
         crawled = false;
+        os = new OsUtil("resources");
     }
     public String getSeedURL(){ return links.get(0);}
     /*
@@ -18,8 +19,8 @@ public class Searcher implements ProjectTester {
     This method will always be called before executing the crawl for a new dataset
      */
     public void initialize(){
-        os = new OsUtil("resources");
         os.deleteFolder(new File("resources"));
+        os = new OsUtil("resources");
     }
 
     /*
@@ -232,6 +233,7 @@ public class Searcher implements ProjectTester {
 
             already_picked[i] = high_index;
             SearchResult entry = new SearchResult(titles.get(high_index), cosine[high_index], links.get(high_index));
+            System.out.println(links.size());
             top.add(entry);
         }
         Comparator<SearchResult> customComparator = Comparator

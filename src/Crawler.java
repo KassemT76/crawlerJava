@@ -11,11 +11,7 @@ public class Crawler {
     private ArrayList<String> links;
     private HashMap<String, Double> tf;
     public HashMap<String, ArrayList<String>> idf_counter;
-
-
-
     private ArrayList<String> outlinks;
-
 
     Crawler(){
         title = "";
@@ -26,6 +22,8 @@ public class Crawler {
 
         tf  = new HashMap<String, Double>();
         idf_counter = new HashMap<String, ArrayList<String>>();
+
+
     }
 
     public void fetchString(String url){
@@ -185,7 +183,13 @@ public class Crawler {
            ArrayList<String> outlink = os.readFile("outgoing"+File.separator+i);
 
            for(String j : outlink){
-                os.appendFile("incoming"+File.separator+linkMap.get(j), link);
+               if(os.readFile("incoming" + File.separator + linkMap.get(j)) == null){
+                   os.createFile("incoming"+File.separator+linkMap.get(j));
+                   os.appendFile("incoming"+File.separator+linkMap.get(j), link);
+               }
+               else {
+                   os.appendFile("incoming"+File.separator+linkMap.get(j), link);
+               }
            }
         }
         //IDF
@@ -227,6 +231,7 @@ public class Crawler {
             distance = mth.euclidean_dist(t, old_t);
         }
         for (int i = 0; i < t[0].length; i++) {
+            os.createFile("pagerank"+File.separator+i);
             os.appendFile("pagerank"+File.separator+i, String.valueOf(t[0][i]));
         }
 
